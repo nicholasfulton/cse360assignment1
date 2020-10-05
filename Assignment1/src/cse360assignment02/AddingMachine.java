@@ -1,16 +1,22 @@
+// Repository available at: https://github.com/nicholasfulton/cse360assignment1
 package cse360assignment02;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * Utility class which aids in the addition of numbers
+ * Utility class which aids in the addition of numbers and the memory thereof
  */
 public class AddingMachine {
 	private int total;
+	private List<Transaction> transactions;
 
 	/**
 	 * Default constructor, initializes members
 	 */
 	public AddingMachine() {
 		total = 0; // not needed - included for clarity
+		transactions = new ArrayList<Transaction>();
 	}
 
 	/**
@@ -18,7 +24,7 @@ public class AddingMachine {
 	 * @return Sum of operands
 	 */
 	public int getTotal() {
-		return 0;
+		return total;
 	}
 
 	/**
@@ -26,6 +32,9 @@ public class AddingMachine {
 	 * @param value Amount by which to increase total
 	 */
 	public void add(int value) {
+		total += value;
+		
+		transactions.add(new Transaction(value >= 0, Math.abs(value)));
 	}
 
 	/**
@@ -33,18 +42,46 @@ public class AddingMachine {
 	 * @param value Amount by which to decrease total
 	 */
 	public void subtract(int value) {
+		total -= value;
+		
+		transactions.add(new Transaction(value < 0, Math.abs(value)));
 	}
 
 	/**
-	 * Represent this object as a string
+	 * Display transaction history
 	 */
 	public String toString() {
-		return "";
+		String str = "0";
+		for (Transaction tr : transactions) {
+			str += tr.toString();
+		}
+		return str;
 	}
 
 	/**
-	 * Reset object to default values
+	 * Empty transaction history and reset total to 0
 	 */
 	public void clear() {
+		total = 0;
+		
+		transactions.clear();
+	}
+}
+
+class Transaction {
+	private boolean positive;
+	private int value;
+	public Transaction(boolean positive, int value) {
+		this.positive = positive;
+		this.value = value;
+	}
+	
+	public String toString() {
+		if (positive) {
+			return " + " + String.valueOf(value);
+		}
+		else {
+			return " - " + String.valueOf(value);
+		}
 	}
 }
